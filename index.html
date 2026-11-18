@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLingS 跨語言科學資訊檢索計畫</title>
+<meta name="description" content="CLingS：CHIST-ERA「Science in Your Own Language」跨國合作計畫，由法國、臺灣、斯洛伐克團隊為七種少資源語言建置科學語料庫、語言模型與跨語言檢索平台。臺灣子計畫由國家教育研究院執行。">
+<meta property="og:title" content="CLingS 跨語言科學資訊檢索計畫">
+<meta property="og:description" content="用自己的語言檢索、閱讀、書寫科學。CHIST-ERA 跨國合作計畫（法國・臺灣・斯洛伐克），2027 CLingS 跨國工作坊於臺北舉行。">
+<meta property="og:type" content="website">
+<!--
+=====================================================================
+  CLingS 計畫官網（v4，2026-11-18）
+  發布方式：GitHub Pages。本檔＝首頁 index.html。
+  同資料夾需有：naer-logo.png（國教院 logo）、fonts/clings-words.woff（七種語言「科學」字型）
+
+  【網站架構】單一檔案，用網址 # 切換三個頁面：
+    #home     計畫介紹（計畫簡介＋臺灣子計畫）
+    #team     研究團隊與聯絡
+    #workshop 2027 CLingS 工作坊（含最新消息）
+
+  【給 AI／修改者的規則】
+    1. 中英雙語：每段文字都有中文（class="zh"）與英文（class="en"）兩份，修改時兩邊都要改。
+    2. 只改被要求的地方，其他內容一字不動。
+    3. 搜尋「✏️」可跳到各區塊。
+    4. 最新消息：在「✏️ 最新消息」清單最上面新增一個 <li>，格式照現有的寫；
+       首頁會自動顯示最新兩則。
+    5. 黃底 <mark class="todo"> 是還沒確定的內容，確定後把整個 <mark> 換成正式文字。
+    6. 修改後，把頁尾「最後更新」日期改成當天（中英文各一處）。
+=====================================================================
+-->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* 七種語言的「科學」使用嵌入字型（FreeSerif 子集，GNU FreeFont，GPL＋字型例外條款） */
+  @font-face{font-family:"CLingSWords";src:url("fonts/clings-words.woff") format("woff");font-display:block}
+  :root{
+    --ink:#1b1b1b; --ink-2:#3a3a3a; --paper:#fbfaf7; --paper-2:#f1ede4; --card:#ffffff; --line:#e6e2d9; --muted:#6b6b6b;
+    --red:#d1495b; --teal:#00798c; --gold:#edae49; --blue:#30638e; --purple:#6a4c93; --green:#3d8b5a; --sun:#ffd166;
+    --todo-bg:#fff0a8; --todo-ink:#6d5200;
+    --sans:"Inter","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --words:"CLingSWords",serif;
+  }
+  *{box-sizing:border-box}
+  html{font-size:clamp(15px, calc(13px + .25vw), 18px);scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.75;font-size:1rem}
+  a{color:var(--teal)}
+  img{max-width:100%}
+  body[data-lang="zh"] .en{display:none!important}
+  body[data-lang="en"] .zh{display:none!important}
+  .todo{background:var(--todo-bg);color:var(--todo-ink);padding:0 .3em;border-radius:3px}
+
+  /* 頁首 */
+  header{position:sticky;top:0;z-index:20;background:rgba(251,250,247,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:1.2rem;padding:.7rem clamp(1rem,4vw,3.5rem);position:relative}
+  .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--ink);min-width:0}
+  .brand img{height:42px;width:auto}
+  .logo{width:42px;height:42px;border-radius:10px;background:var(--ink);color:#fff;place-items:center;font-weight:800;font-size:.72rem}
+  .brand b{display:block;font-weight:800;font-size:1.25rem;letter-spacing:-.02em;line-height:1.1}
+  .brand b em{font-style:normal;color:var(--red)}
+  .brand small{display:block;color:var(--muted);font-size:.74rem;line-height:1.35;max-width:330px}
+  nav{margin-left:auto;display:flex;gap:.15rem;flex-wrap:wrap}
+  nav a{padding:.42rem .85rem;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.95rem}
+  nav a:hover{background:var(--paper-2)}
+  nav a.active{background:var(--ink);color:#fff}
+  .lang{border:1.5px solid var(--ink);background:none;border-radius:999px;padding:.3rem .85rem;cursor:pointer;font-size:.85rem;font-weight:600;white-space:nowrap;font-family:var(--sans)}
+  .menu-btn{display:none;border:0;background:none;font-size:1.4rem;cursor:pointer}
+
+  main{max-width:1600px;margin:0 auto;padding:0 clamp(1rem,4vw,3.5rem) 4rem}
+  section.page{display:none;animation:fade .25s ease}
+  section.page.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  h1,h2,h3{line-height:1.3;color:var(--ink);letter-spacing:-.01em}
+  h1{font-size:2.3rem;font-weight:900;margin:.2em 0 .35em}
+  h2{font-size:1.5rem;font-weight:800;margin:2.8rem 0 1rem;scroll-margin-top:90px}
+  h2::after{content:"";display:block;width:48px;height:4px;border-radius:2px;background:var(--sun);margin-top:.45rem}
+  h3{font-size:1.1rem;font-weight:700;margin:1.1rem 0 .35rem}
+  .page-head{padding:2.6rem 0 .4rem}
+  .eyebrow{font-family:var(--mono);color:var(--red);font-weight:600;letter-spacing:.06em;font-size:.78rem;text-transform:uppercase}
+  .lead{font-size:1.08rem;color:var(--ink-2)}
+  u{text-decoration:none;background:linear-gradient(transparent 60%,var(--sun) 60%)}
+  .muted{color:var(--muted)}
+
+  /* 區塊分隔：臺灣子計畫 */
+  .band{margin:3.4rem 0 0;padding-top:2.4rem;border-top:2px solid var(--ink)}
+  .band > .eyebrow{color:var(--teal)}
+  .band > h2{margin-top:.3rem;font-size:1.8rem}
+
+  /* 首頁主視覺 */
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:2.6rem;align-items:center;padding:3.2rem 0 1rem}
+  .hero h1{font-size:2.7rem;line-height:1.22;margin:.5rem 0 .6rem}
+  .hero .sub{font-weight:600;color:var(--ink-2);margin:0 0 .8rem}
+  .hero .lead{font-size:1rem;color:#555}
+  .meta{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin-top:1rem;font-size:.88rem;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  .btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem}
+  .btn{display:inline-block;padding:.65rem 1.2rem;border-radius:999px;text-decoration:none;font-weight:700;font-size:.92rem;text-align:center}
+  .btn.primary{background:var(--ink);color:#fff}
+  .btn.ghost,.btn.outline{border:1.5px solid var(--ink);color:var(--ink)}
+  .words{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+  .w{border-radius:14px;padding:.85rem 1rem;color:#fff;display:flex;flex-direction:column;justify-content:space-between;min-height:96px}
+  .w small{font-family:var(--words);font-size:.85rem;opacity:.9}
+  .w big{font-family:var(--words);font-size:clamp(1.3rem,2.1vw,2.1rem);line-height:1.15;overflow-wrap:anywhere}
+  .w.rtl big,.w.rtl small{direction:rtl;text-align:right}
+  .w.tw{grid-column:span 2;background:var(--ink);min-height:120px}
+  .w.tw .pair{display:flex;align-items:baseline;gap:1rem}
+  .w.tw .pair b{font-family:"Noto Serif TC","Noto Sans TC",serif;font-weight:700;line-height:1}
+  .w.tw big,.w.tw .pair b{font-size:clamp(1.8rem,3vw,2.7rem)}
+  .c1{background:var(--red)}.c2{background:var(--teal)}.c3{background:var(--gold);color:var(--ink)}.c4{background:var(--blue)}.c5{background:var(--purple)}.c6{background:var(--green)}
+
+  /* 卡片 */
+  .grid{display:grid;gap:1.1rem}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.4rem}
+  .card h3{margin-top:0}
+  .card .btn{margin-top:.4rem}
+  .card.feature{background:var(--sun);border-color:var(--sun)}
+  .card.feature .btn.outline{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .num{font-family:var(--mono);color:var(--red);font-weight:600;font-size:.85rem}
+  .g4>.card:nth-child(4n+1) .num{color:var(--red)}.g4>.card:nth-child(4n+2) .num{color:var(--teal)}.g4>.card:nth-child(4n+3) .num{color:var(--blue)}.g4>.card:nth-child(4n+4) .num{color:var(--green)}
+  .stat b{display:block;font-size:1.8rem;font-weight:900;color:var(--ink);line-height:1.2}
+  .stat span{color:var(--muted);font-size:.9rem}
+  .g4>.stat:nth-child(1){border-top:5px solid var(--red)}.g4>.stat:nth-child(2){border-top:5px solid var(--teal)}.g4>.stat:nth-child(3){border-top:5px solid var(--gold)}.g4>.stat:nth-child(4){border-top:5px solid var(--blue)}
+  .tag{display:inline-block;font-size:.74rem;font-weight:700;padding:.15rem .6rem;border-radius:999px;background:var(--ink);color:#fff;margin-bottom:.5rem}
+  .tag.jade{background:var(--teal)}
+  .tag.gray{background:var(--paper-2);color:var(--ink-2)}
+
+  /* 人員 */
+  .person{display:flex;gap:1rem;align-items:flex-start}
+  .avatar{flex:0 0 72px;height:72px;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;color:var(--muted);font-size:.75rem;object-fit:cover}
+  .person b{display:block;font-size:1.1rem}
+  .person .role{color:var(--red);font-size:.82rem;font-weight:700}
+  .person small{color:var(--muted);display:block;line-height:1.5}
+  .mail{display:inline-block;margin-top:.45rem;font-size:.88rem;word-break:break-all}
+  .mail::before{content:"✉ ";color:var(--muted)}
+
+  table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:.94rem}
+  th,td{padding:.7rem .9rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  th{background:var(--paper-2);font-weight:700}
+  td.time{white-space:nowrap;color:var(--muted);width:130px}
+  .wrap{overflow-x:auto}
+
+  .timeline{list-style:none;padding:0;margin:0;border-left:3px solid var(--line)}
+  .timeline li{position:relative;padding:0 0 1.3rem 1.5rem}
+  .timeline li::before{content:"";position:absolute;left:-9px;top:.5rem;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--ink)}
+  .timeline li.hl::before{background:var(--sun);border-color:var(--ink)}
+  .timeline time{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+  .timeline b{display:block}
+
+  .news-list{list-style:none;padding:0;margin:0}
+  .news-list li{display:flex;gap:1rem;padding:.8rem 0;border-bottom:1px dashed var(--line)}
+  .news-list li:last-child{border-bottom:0}
+  .news-list time{flex:0 0 96px;color:var(--muted);font-family:var(--mono);font-size:.88rem;padding-top:.15rem}
+  .steps{counter-reset:s;list-style:none;padding:0}
+  .steps li{counter-increment:s;position:relative;padding:.2rem 0 .9rem 2.7rem}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:.1rem;width:1.9rem;height:1.9rem;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:.85rem;font-weight:700}
+  .note{background:#e3f1f3;border-radius:12px;padding:.9rem 1.15rem;font-size:.94rem;color:#0d4a54}
+
+  /* 國科會計畫資訊 */
+  .grant{margin:1.2rem 0 .4rem;background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:16px;overflow:hidden}
+  .grant-head{background:var(--paper-2);padding:.6rem 1.4rem;font-weight:800;font-size:.95rem}
+  .grant dl{display:grid;grid-template-columns:max-content 1fr;gap:.55rem 1.6rem;margin:0;padding:1.1rem 1.4rem 1.2rem}
+  .grant dt{color:var(--muted);font-size:.9rem;padding-top:.1rem;white-space:nowrap}
+  .grant dd{margin:0;font-weight:600}
+  .grant dd small{font-weight:400;color:var(--ink-2)}
+  .grant .grant-title{font-size:1.12rem;font-weight:800}
+
+  footer{background:var(--ink);color:#bdbdbd;font-size:.86rem}
+  footer .in{max-width:1600px;margin:0 auto;padding:2rem clamp(1rem,4vw,3.5rem);display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between}
+
+  @media (max-width:980px){
+    .menu-btn{display:block;margin-left:auto}
+    nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--paper);flex-direction:column;padding:.5rem 1rem 1rem;border-bottom:1px solid var(--line)}
+    nav.open{display:flex}
+    .brand small{display:none}
+    .hero{grid-template-columns:1fr;padding-top:2rem}.hero h1{font-size:2rem}
+    h1{font-size:1.8rem}
+  }
+  @media (max-width:700px){
+    .page-head{padding-top:1.6rem}
+    h1,.hero h1{font-size:1.75rem}
+    h2{font-size:1.3rem;margin-top:2rem}
+    .band > h2{font-size:1.5rem}
+    .hero{gap:1.6rem;padding-top:1.4rem}
+    .words{gap:.45rem}
+    .w{min-height:80px;padding:.7rem .8rem}
+    .w.tw{min-height:96px}
+    .meta{flex-direction:column;gap:.2rem}
+    .card{padding:1.1rem}
+    .person{gap:.8rem}.avatar{flex-basis:56px;height:56px}
+    .news-list li{flex-direction:column;gap:0}
+    .news-list time{flex:none}
+    th,td{padding:.55rem .6rem}
+    td.time{width:auto}
+    table{font-size:.88rem}
+    .grant dl{grid-template-columns:1fr;gap:.1rem}
+    .grant dt{margin-top:.6rem}
+    .grant dt:first-child{margin-top:0}
+    footer .in{flex-direction:column}
+  }
+  @media print{header,footer{display:none}section.page{display:block!important}}
+</style>
+</head>
+<body data-lang="zh">
+
+<!-- ✏️ 頁首 -->
+<header>
+  <div class="bar">
+    <a class="brand" href="#home">
+      <img src="naer-logo.png" alt="國家教育研究院 NAER" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+      <div class="logo" style="display:none">NAER</div>
+      <div>
+        <b>CLing<em>S</em></b>
+        <small class="zh">跨語言科學資訊檢索：少資源語言的科學文本</small>
+        <small class="en">Cross-lingual Information Retrieval for Scientific Datasets in Less-resourced Languages</small>
+      </div>
+    </a>
+    <button class="menu-btn" aria-label="選單 Menu" onclick="document.querySelector('nav').classList.toggle('open')">☰</button>
+    <nav>
+      <a href="#home"><span class="zh">計畫介紹</span><span class="en">About</span></a>
+      <a href="#team"><span class="zh">研究團隊與聯絡</span><span class="en">People &amp; Contact</span></a>
+      <a href="#workshop"><span class="zh">2027 CLingS 工作坊</span><span class="en">2027 CLingS Workshop</span></a>
+    </nav>
+    <button class="lang" onclick="toggleLang()">中 / EN</button>
+  </div>
+</header>
+
+<main>
+
+<!-- =========================================================
+     ✏️ 頁面一：計畫介紹 #home（計畫簡介＋臺灣子計畫）
+     ========================================================= -->
+<section class="page" id="home">
+
+  <!-- ✏️ 主視覺：右側七種語言的「科學」使用嵌入字型；修改用字前請先跟各語言團隊確認 -->
+  <div class="hero">
+    <div>
+      <div class="eyebrow">CHIST-ERA 2025 · Science in Your Own Language</div>
+      <h1>
+        <span class="zh">用<u>自己的語言</u><br>檢索、閱讀、書寫科學</span>
+        <span class="en">Search, read and write science in <u>your own language</u></span>
+      </h1>
+      <p class="sub zh">跨語言科學資訊檢索：少資源語言的科學文本</p>
+      <p class="sub en">Cross-lingual Information Retrieval for Scientific Datasets in Less-resourced Languages</p>
+      <p class="lead zh">CLingS 是歐洲 CHIST-ERA 2025 年度「Science in Your Own Language」（SOL）主題下的跨國合作研究計畫，由法國國立東方語言文化學院（INALCO）擔任總計畫協調單位，結合法國、臺灣、斯洛伐克四個研究單位，為七種少資源語言建置科學語料庫、訓練語言模型，並開發跨語言科學資訊檢索平台。</p>
+      <p class="lead en">CLingS is an international research project under the CHIST-ERA 2025 call “Science in Your Own Language” (SOL). Coordinated by INALCO (France), it brings together four partners in France, Taiwan and Slovakia to build scientific corpora, train language models and develop a cross-lingual scientific retrieval platform for seven less-resourced languages.</p>
+      <div class="meta">
+        <div><span class="zh">執行期間 </span><span class="en">Period </span><b><span class="zh">2026/1 – 2028/12</span><span class="en">Jan 2026 – Dec 2028</span></b></div>
+        <div><span class="zh">合作國家 </span><span class="en">Partners </span><b><span class="zh">法國・臺灣・斯洛伐克</span><span class="en">France · Taiwan · Slovakia</span></b></div>
+        <div><span class="zh">臺灣執行單位 </span><span class="en">Taiwan host </span><b><span class="zh">國家教育研究院</span><span class="en">NAER</span></b></div>
+      </div>
+      <div class="btns">
+        <a class="btn primary" href="#workshop"><span class="zh">2027 CLingS 工作坊 →</span><span class="en">2027 CLingS Workshop →</span></a>
+        <a class="btn ghost" href="#taiwan"><span class="zh">臺灣子計畫</span><span class="en">Taiwan Subproject</span></a>
+      </div>
+    </div>
+    <div class="words" aria-label="七種語言的「科學」">
+      <div class="w tw"><small><span class="zh">台語</span><span class="en">Taiwanese</span> · Tâi-gí</small><div class="pair"><b>科學</b><big>kho-ha̍k</big></div></div>
+      <div class="w c1"><small>Українська</small><big>наука</big></div>
+      <div class="w c2"><small>Беларуская</small><big>навука</big></div>
+      <div class="w c3"><small>Eesti</small><big>teadus</big></div>
+      <div class="w c4"><small>Slovenčina</small><big>veda</big></div>
+      <div class="w c5"><small>ਪੰਜਾਬੀ</small><big>ਵਿਗਿਆਨ</big></div>
+      <div class="w c6 rtl"><small>ייִדיש</small><big>וויסנשאַפֿט</big></div>
+    </div>
+  </div>
+
+  <!-- ✏️ 工作坊公告（首頁橫幅） -->
+  <div class="grid g2" style="margin-top:1.6rem">
+    <div class="card feature">
+      <span class="tag">2027/4/8–9 · <span class="zh">臺北</span><span class="en">Taipei</span></span>
+      <h3><span class="zh">2027 CLingS 跨國工作坊</span><span class="en">2027 CLingS International Workshop</span></h3>
+      <p class="zh">2027 年 4 月 8 日（四）至 9 日（五），國家教育研究院臺北院區。第一天為公開場次：上午為跨國團隊研究介紹，下午為專題演講。詳細議程與報名資訊將於 2027 年 2 月下旬公布。</p>
+      <p class="en">8–9 April 2027, NAER Taipei Campus. Day 1 is open to the public: international team presentations in the morning and a keynote in the afternoon. Full programme and registration details will be announced in late February 2027.</p>
+      <a class="btn outline" href="#workshop"><span class="zh">工作坊詳情</span><span class="en">Details</span></a>
+    </div>
+    <div class="card">
+      <h3><span class="zh">最新消息</span><span class="en">Latest News</span></h3>
+      <!-- 自動顯示工作坊頁「最新消息」的前兩則，不用在這裡修改 -->
+      <ul class="news-list" id="homeNews"></ul>
+      <p style="margin-bottom:0"><a href="#news"><span class="zh">更多消息 →</span><span class="en">More →</span></a></p>
+    </div>
+  </div>
+
+  <!-- ✏️ 為什麼需要 CLingS -->
+  <h2><span class="zh">為什麼需要 CLingS</span><span class="en">Why CLingS</span></h2>
+  <p class="zh">英語主導了當代科學的生產與傳播。多語言大型語言模型雖然進步快速，訓練資料與應用設計仍高度偏向優勢語言；少資源語言普遍缺乏科學語料、專屬的語言模型與完整的科學術語，使用這些語言的研究者與學習者難以用母語取得與產出科學知識。CLingS 不以「翻譯成優勢語言」為唯一途徑，而是要讓系統能直接以多種語言檢索、理解與生成科學內容，並保留各語言的語言與文化特性。</p>
+  <p class="en">Science is produced and shared mainly in English. Multilingual large language models have advanced quickly, yet their data and design remain skewed toward dominant languages; less-resourced languages lack scientific corpora, dedicated models and complete terminologies. Rather than treating translation into a dominant language as the only path, CLingS aims at systems that retrieve, interpret and generate scientific content directly in multiple languages, keeping their linguistic and cultural specificity.</p>
+  <p class="zh muted">七種目標語言——台語、烏克蘭語、白俄羅斯語、愛沙尼亞語、斯洛伐克語、旁遮普語、意第緒語——分屬不同語系，卻有共同處境：都曾經或仍然處於政治弱勢，長期在強勢語言的陰影下發展。CLingS 是 SOL 主題中唯一涵蓋台語的計畫。</p>
+  <p class="en muted">The seven target languages — Taiwanese, Ukrainian, Belarusian, Estonian, Slovak, Punjabi and Yiddish — belong to different families but share one situation: each has developed, or still exists, in a politically weaker position beside a dominant language. CLingS is the only project in the SOL call that covers Taiwanese.</p>
+
+  <!-- ✏️ 研究主軸 -->
+  <h2><span class="zh">研究主軸</span><span class="en">What We Do</span></h2>
+  <div class="grid g4">
+    <div class="card"><div class="num">01</div><h3><span class="zh">科學語料庫</span><span class="en">Scientific corpora</span></h3><p class="zh">為七種語言建置並標註科學語料庫，涵蓋語言學、醫學、數學、地理、法律等領域，每種語言 100–200 萬詞。</p><p class="en">Annotated scientific corpora for seven languages — linguistics, medicine, mathematics, geography, law — 1–2 million tokens each.</p></div>
+    <div class="card"><div class="num">02</div><h3><span class="zh">語言模型</span><span class="en">Language models</span></h3><p class="zh">為各語言訓練科學領域的語言模型，並對齊到共享的多語言向量空間。</p><p class="en">Science-adapted models for each language, aligned in a shared multilingual embedding space.</p></div>
+    <div class="card"><div class="num">03</div><h3><span class="zh">跨語言檢索</span><span class="en">Cross-lingual retrieval</span></h3><p class="zh">以 Graph-RAG 與多智能體架構打造檢索平台，整合於 INALCO 的 <a href="https://lacas.inalco.fr/" target="_blank" rel="noopener">LaCAS</a> 平台。</p><p class="en">A retrieval platform built on Graph-RAG and multi-agent architectures, hosted on INALCO’s <a href="https://lacas.inalco.fr/" target="_blank" rel="noopener">LaCAS</a>.</p></div>
+    <div class="card"><div class="num">04</div><h3><span class="zh">術語與開放資源</span><span class="en">Terms &amp; open resources</span></h3><p class="zh">建立雙語科學術語對照，邀請語言專家與使用者社群驗證，所有資料集、模型與工具以開放授權釋出。</p><p class="en">Bilingual scientific glossaries validated with experts and communities; all datasets, models and tools released under open licences.</p></div>
+  </div>
+
+  <!-- ✏️ 合作單位 -->
+  <h2><span class="zh">合作單位</span><span class="en">Partners</span></h2>
+  <div class="wrap"><table>
+    <tr><th><span class="zh">單位</span><span class="en">Partner</span></th><th><span class="zh">國家</span><span class="en">Country</span></th><th><span class="zh">負責語言</span><span class="en">Languages</span></th><th><span class="zh">經費來源</span><span class="en">Funder</span></th></tr>
+    <tr><td><span class="zh">法國國立東方語言文化學院（INALCO）— 總計畫協調</span><span class="en">INALCO — Coordinator</span></td><td><span class="zh">法國</span><span class="en">France</span></td><td><span class="zh">烏克蘭語、白俄羅斯語、愛沙尼亞語、意第緒語、旁遮普語</span><span class="en">Ukrainian, Belarusian, Estonian, Yiddish, Punjabi</span></td><td>ANR</td></tr>
+    <tr><td><span class="zh">國家教育研究院（NAER）</span><span class="en">National Academy for Educational Research (NAER)</span></td><td><span class="zh">臺灣</span><span class="en">Taiwan</span></td><td><span class="zh">台語</span><span class="en">Taiwanese</span></td><td><span class="zh">國科會</span><span class="en">NSTC</span></td></tr>
+    <tr><td><span class="zh">斯洛伐克科學院資訊研究所（II SAS）</span><span class="en">Institute of Informatics, Slovak Academy of Sciences (II SAS)</span></td><td><span class="zh">斯洛伐克</span><span class="en">Slovakia</span></td><td><span class="zh">斯洛伐克語</span><span class="en">Slovak</span></td><td>SAS</td></tr>
+    <tr><td><span class="zh">康士坦丁哲學家大學（UKF）</span><span class="en">Constantine the Philosopher University in Nitra (UKF)</span></td><td><span class="zh">斯洛伐克</span><span class="en">Slovakia</span></td><td><span class="zh">斯洛伐克語</span><span class="en">Slovak</span></td><td><span class="zh">自籌</span><span class="en">Self-funded</span></td></tr>
+  </table></div>
+
+  <!-- ✏️ 臺灣子計畫 -->
+  <div class="band" id="taiwan">
+    <div class="eyebrow">Taiwan Subproject</div>
+    <h2><span class="zh">臺灣子計畫：台語科學論述</span><span class="en">Taiwan Subproject: Science in Taiwanese</span></h2>
+    <p class="zh">台語曾是臺灣的共通語，但在 20 世紀後半葉長期受到語言壓制，正式場域、教育與學術領域的使用大幅萎縮。2019 年《國家語言發展法》確立台語的國家語言地位，但台語在科學等高階語域仍嚴重不足：科學文本稀少、術語系統不完整、數位資源落後。臺灣團隊由國家教育研究院語文教育及編譯研究中心執行，負責建置台語科學語料庫、台華科學術語對照與台語科學語言模型，並將台語檢索整合至跨語言平台，發展科學教育應用。</p>
+    <p class="en">Taiwanese was once Taiwan’s lingua franca, but decades of language suppression in the late 20th century sharply reduced its use in formal, educational and academic settings. The 2019 Development of National Languages Act recognised Taiwanese as a national language, yet it still lacks scientific texts, a complete terminology and digital resources. The Taiwan team, based at NAER’s Research Center for Translation, Compilation and Language Education, builds a Taiwanese scientific corpus, Taiwanese–Mandarin terminology and a Taiwanese scientific language model, integrates Taiwanese into the cross-lingual platform, and develops applications for science education.</p>
+
+    <div class="grant">
+      <div class="grant-head"><span class="zh">國科會計畫資訊</span><span class="en">NSTC Project Information</span></div>
+      <dl>
+        <dt><span class="zh">計畫名稱</span><span class="en">Project title</span></dt>
+        <dd class="grant-title"><span class="zh">針對資源匱乏語言之跨語言科學資料集檢索研究</span><span class="en">Cross-lingual Information Retrieval for Scientific Datasets in Less-resourced Languages</span></dd>
+        <dt><span class="zh">補助類別</span><span class="en">Grant type</span></dt>
+        <dd><span class="zh">國家科學及技術委員會 雙邊協議專案型國際合作研究計畫<br><small>115–117 年度（2026–2028）</small></span><span class="en">NSTC Bilateral Agreement Project-based International Collaborative Research<br><small>2026–2028</small></span></dd>
+        <dt><span class="zh">執行單位</span><span class="en">Host institution</span></dt>
+        <dd><span class="zh">國家教育研究院 語文教育及編譯研究中心</span><span class="en">Research Center for Translation, Compilation and Language Education, NAER</span></dd>
+        <dt><span class="zh">主持人</span><span class="en">Investigators</span></dt>
+        <dd><span class="zh">林佳怡（主持人）；吳鑑城、廖元甫（共同主持人）</span><span class="en">Ka-I Lim (PI); Jian-Cheng Wu, Yuan-Fu Liao (Co-PIs)</span></dd>
+      </dl>
+    </div>
+
+    <h3 style="margin-top:2rem"><span class="zh">預期成果（2028）</span><span class="en">Expected Outcomes (2028)</span></h3>
+    <div class="grid g4">
+      <div class="card stat"><b>100<span class="zh"> 萬字元+</span><span class="en">M+ chars</span></b><span class="zh">台語科學語料庫</span><span class="en">Taiwanese scientific corpus</span></div>
+      <div class="card stat"><b>3,000<span class="zh"> 組+</span><span class="en">+</span></b><span class="zh">台華科學術語對照</span><span class="en">Taiwanese–Mandarin term pairs</span></div>
+      <div class="card stat"><b>LLM</b><span class="zh">台語科學語言模型</span><span class="en">Taiwanese scientific language model</span></div>
+      <div class="card stat"><b>LaCAS</b><span class="zh">台語科學資訊檢索（整合於 LaCAS 平台）</span><span class="en">Taiwanese retrieval on the LaCAS platform</span></div>
+    </div>
+
+    <h3 style="margin-top:2rem"><span class="zh">年度重點</span><span class="en">Milestones</span></h3>
+    <ul class="timeline">
+      <li><time>2026</time><b><span class="zh">第一年：語料蒐集與標準化</span><span class="en">Year 1: data collection &amp; standards</span></b><span class="zh">出席巴黎啟動會議（5 月）；建置 50 萬字元台語科學語料庫、500 組台華科學術語對照、台語科學語言模型第一版。</span><span class="en">Paris kick-off (May); a 500,000-character Taiwanese scientific corpus, 500 term pairs and the first Taiwanese scientific language model.</span></li>
+      <li class="hl"><time>2027</time><b><span class="zh">第二年：擴充與介接</span><span class="en">Year 2: expansion &amp; connection</span></b><span class="zh">語料庫擴充至 80–100 萬字元、2,500 組術語對照、語言模型第二版；舉辦 CLingS 跨國工作坊，並與跨語言成果介接。</span><span class="en">Corpus at 0.8–1M characters, 2,500 term pairs, second model version; the CLingS International Workshop in Taipei and connection with cross-lingual results.</span></li>
+      <li><time>2028</time><b><span class="zh">第三年：整合、應用與開源</span><span class="en">Year 3: integration, application &amp; release</span></b><span class="zh">完成台語科學資訊檢索（整合於 LaCAS）、台語科學教材範例與教學指引；出席斯洛伐克最終研討會並開源釋出。</span><span class="en">Taiwanese retrieval on LaCAS, sample teaching materials and guidelines; final conference in Slovakia and open release.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- =========================================================
+     ✏️ 頁面二：研究團隊與聯絡 #team
+     照片：把 <div class="avatar">照片</div> 換成 <img class="avatar" src="photos/檔名.jpg" alt="姓名">
+     ========================================================= -->
+<section class="page" id="team">
+  <div class="page-head">
+    <div class="eyebrow">People &amp; Contact</div>
+    <h1><span class="zh">研究團隊與聯絡</span><span class="en">People &amp; Contact</span></h1>
+  </div>
+
+  <h2><span class="zh">臺灣團隊</span><span class="en">Taiwan Team</span></h2>
+  <div class="grid g3">
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">主持人</span><span class="en">Principal Investigator</span></span>
+      <b><span class="zh">林佳怡</span><span class="en">Ka-I Lim</span></b>
+      <small class="zh">國家教育研究院 語文教育及編譯研究中心 助理研究員</small>
+      <small class="en">Assistant Research Fellow, Research Center for Translation, Compilation and Language Education, NAER</small>
+      <a class="mail" href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a>
+    </div></div>
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">共同主持人</span><span class="en">Co-Principal Investigator</span></span>
+      <b><span class="zh">吳鑑城</span><span class="en">Jian-Cheng Wu</span></b>
+      <small class="zh">國家教育研究院 語文教育及編譯研究中心 副研究員兼中心主任</small>
+      <small class="en">Associate Research Fellow and Director, Research Center for Translation, Compilation and Language Education, NAER</small>
+    </div></div>
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">共同主持人</span><span class="en">Co-Principal Investigator</span></span>
+      <b><span class="zh">廖元甫</span><span class="en">Yuan-Fu Liao</span></b>
+      <small class="zh">國立陽明交通大學 智能系統研究所 教授兼所長</small>
+      <small class="en">Professor and Director, Institute of Intelligent Systems, National Yang Ming Chiao Tung University</small>
+    </div></div>
+  </div>
+
+  <!-- ✏️ 研究助理：新增一位就複製一張 .card -->
+  <h3 style="margin-top:2rem"><span class="zh">研究助理</span><span class="en">Research Assistants</span></h3>
+  <div class="grid g3">
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">專任助理</span><span class="en">Full-time Research Assistant</span></span>
+      <b><span class="zh">陳映彤</span><span class="en">Yingtong Chen</span></b>
+      <small class="zh">國家教育研究院 語文教育及編譯研究中心</small>
+      <small class="en">Research Center for Translation, Compilation and Language Education, NAER</small>
+    </div></div>
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">兼任助理</span><span class="en">Part-time Research Assistant</span></span>
+      <b><span class="zh">李宇仁</span><span class="en">Yuren Li</span></b>
+      <small class="zh">國立陽明交通大學 外國語文學系 外國文學與語言學碩士班</small>
+      <small class="en">MA Program in Foreign Literatures and Linguistics, Department of Foreign Languages and Literatures, National Yang Ming Chiao Tung University</small>
+    </div></div>
+    <div class="card person"><div class="avatar">照片</div><div>
+      <span class="role"><span class="zh">兼任助理</span><span class="en">Part-time Research Assistant</span></span>
+      <b><span class="zh">許宸瑋</span><span class="en">Chenwei Xu</span></b>
+      <small class="zh">國立臺北教育大學 台灣語言與文化學系 碩士班</small>
+      <small class="en">Master’s Program, Department of Taiwan Culture, Languages and Literature, National Taipei University of Education</small>
+      <a class="mail" href="mailto:hsuwei83@gmail.com">hsuwei83@gmail.com</a>
+    </div></div>
+  </div>
+
+  <!-- ✏️ 聯絡我們 -->
+  <h2 id="contact"><span class="zh">聯絡我們</span><span class="en">Contact</span></h2>
+  <div class="card">
+    <p class="zh" style="margin:0">對計畫或工作坊有任何問題，歡迎來信計畫主持人 林佳怡：<a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
+    <p class="en" style="margin:0">For questions about the project or the workshop, please contact the Principal Investigator, Ka-I Lim: <a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a>.</p>
+  </div>
+
+  <h2><span class="zh">跨國合作團隊</span><span class="en">International Partners</span></h2>
+  <div class="grid g3">
+    <div class="card">
+      <span class="tag"><span class="zh">法國・總計畫協調</span><span class="en">France · Coordinator</span></span>
+      <h3>INALCO</h3>
+      <p><small class="zh">法國國立東方語言文化學院 自然語言處理系（ERTIM）</small><small class="en">National Institute for Oriental Languages and Civilizations, Dept. of NLP (ERTIM)</small></p>
+      <p><b><span class="zh">計畫主持人：</span><span class="en">PI: </span></b>Valentina Fedchenko<br>
+      <b><span class="zh">共同主持人：</span><span class="en">Co-PIs: </span></b>Pierre Magistry, Bénédicte Diot-Parvaz Ahmad, Antoine Chalvin</p>
+    </div>
+    <div class="card">
+      <span class="tag gray"><span class="zh">斯洛伐克</span><span class="en">Slovakia</span></span>
+      <h3>II SAS</h3>
+      <p><small class="zh">斯洛伐克科學院資訊研究所 語音分析與合成部</small><small class="en">Institute of Informatics, Slovak Academy of Sciences, Dept. of Speech Analysis and Synthesis</small></p>
+      <p><b><span class="zh">計畫主持人：</span><span class="en">PI: </span></b>Milan Rusko<br>
+      <b><span class="zh">共同主持人：</span><span class="en">Co-PIs: </span></b>Marian Trnka, Robert Sabo, Viktória Čiernik Kevická</p>
+    </div>
+    <div class="card">
+      <span class="tag gray"><span class="zh">斯洛伐克</span><span class="en">Slovakia</span></span>
+      <h3>UKF</h3>
+      <p><small class="zh">康士坦丁哲學家大學（尼特拉）斯拉夫語文學系</small><small class="en">Constantine the Philosopher University in Nitra, Dept. of Slavic Philology</small></p>
+      <p><b><span class="zh">計畫主持人：</span><span class="en">PI: </span></b>Martin Diweg-Pukanec<br>
+      <b><span class="zh">共同主持人：</span><span class="en">Co-PIs: </span></b>Ľubomír Kralčák, Patrik Petráš</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     ✏️ 頁面三：2027 CLingS 工作坊 #workshop（含最新消息）
+     ========================================================= -->
+<section class="page" id="workshop">
+  <div class="page-head">
+    <div class="eyebrow">International Workshop 2027 · Taipei</div>
+    <h1><span class="zh">2027 CLingS 跨國工作坊</span><span class="en">2027 CLingS International Workshop</span></h1>
+    <p class="lead zh">CLingS 法國、臺灣、斯洛伐克三國團隊齊聚臺北，分享少資源語言科學語料庫、語言模型與跨語言檢索的最新進展，並與臺灣的語言學、資訊科學及教育界交流台語科學論述與 AI 應用。</p>
+    <p class="lead en">The French, Taiwanese and Slovak teams of CLingS meet in Taipei to share progress on scientific corpora, language models and cross-lingual retrieval for less-resourced languages, and to discuss science in Taiwanese and AI applications with Taiwan’s linguistics, computing and education communities.</p>
+  </div>
+
+  <div class="grid g3">
+    <div class="card"><span class="tag jade"><span class="zh">日期</span><span class="en">Date</span></span><h3 class="zh">2027 年 4 月 8 日（四）<br>– 4 月 9 日（五）</h3><h3 class="en">Thu 8 – Fri 9 April 2027</h3></div>
+    <div class="card"><span class="tag jade"><span class="zh">地點</span><span class="en">Venue</span></span><h3 class="zh">國家教育研究院 臺北院區</h3><h3 class="en">NAER Taipei Campus</h3><p style="margin:0"><small class="zh">臺北市大安區和平東路一段 179 號</small><small class="en">No. 179, Sec. 1, Heping E. Rd., Da’an Dist., Taipei</small></p></div>
+    <div class="card"><span class="tag jade"><span class="zh">對象</span><span class="en">Audience</span></span><h3 class="zh">Day 1 公開場次</h3><h3 class="en">Day 1 open to the public</h3><p style="margin:0"><small class="zh">歡迎語言學、資訊科學、台語教育與科學教育領域的研究者與教師參加</small><small class="en">Researchers and teachers in linguistics, computer science, Taiwanese-language education and science education are welcome</small></p></div>
+  </div>
+
+  <h2><span class="zh">活動規劃</span><span class="en">Programme Outline</span></h2>
+  <div class="grid g2">
+    <div class="card">
+      <span class="tag"><span class="zh">4/8（四）公開場次</span><span class="en">Thu 8 April · Public</span></span>
+      <h3><span class="zh">Day 1：研究分享與專題演講</span><span class="en">Day 1: Research talks &amp; keynote</span></h3>
+      <p class="zh" style="margin:0">上午由法國 INALCO、斯洛伐克 II SAS／UKF 與臺灣 NAER 團隊介紹研究進展；下午為專題演講。</p>
+      <p class="en" style="margin:0">Morning presentations by the INALCO (France), II SAS / UKF (Slovakia) and NAER (Taiwan) teams; keynote in the afternoon.</p>
+    </div>
+    <div class="card">
+      <span class="tag gray"><span class="zh">4/9（五）跨國團隊場次</span><span class="en">Fri 9 April · Project teams</span></span>
+      <h3><span class="zh">Day 2：工作會議與文化交流</span><span class="en">Day 2: Working meeting &amp; cultural exchange</span></h3>
+      <p class="zh" style="margin:0">各團隊進度報告與討論，並安排在地語言文化體驗（不對外開放）。</p>
+      <p class="en" style="margin:0">Progress reports and discussion among the teams, with a local language and culture activity (not open to the public).</p>
+    </div>
+  </div>
+  <p class="note"><span class="zh">詳細議程、講者與報名方式將於 2027 年 2 月下旬在本頁公布。</span><span class="en">The full programme, speakers and registration details will be announced on this page in late February 2027.</span></p>
+
+  <!-- ✏️ 最新消息：新消息加在最上面；首頁會自動顯示前兩則 -->
+  <h2 id="news"><span class="zh">最新消息</span><span class="en">News</span></h2>
+  <ul class="news-list" id="newsList">
+    <li><time>2026/11</time><span class="zh">2027 CLingS 跨國工作坊訂於 2027 年 4 月 8–9 日在國家教育研究院臺北院區舉行，詳細議程與報名資訊將於 2 月下旬公布。</span><span class="en">The 2027 CLingS International Workshop will take place on 8–9 April 2027 at NAER Taipei Campus; programme and registration details will follow in late February.</span></li>
+    <li><time>2026/11</time><span class="zh">計畫官網上線。</span><span class="en">Project website launched.</span></li>
+    <li><time>2026/05</time><span class="zh">CLingS 啟動會議於 5 月 21–22 日在巴黎 INALCO 舉行。</span><span class="en">The CLingS kick-off meeting was held at INALCO, Paris, on 21–22 May.</span></li>
+    <li><time>2026/01</time><span class="zh">CLingS 計畫正式啟動，執行至 2028 年 12 月。</span><span class="en">CLingS officially started; it runs until December 2028.</span></li>
+  </ul>
+
+  <h2><span class="zh">聯絡</span><span class="en">Contact</span></h2>
+  <p class="zh">工作坊相關問題，請來信計畫主持人 林佳怡：<a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
+  <p class="en">For questions about the workshop, please contact Ka-I Lim: <a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
+</section>
+
+</main>
+
+<!-- ✏️ 頁尾 -->
+<footer>
+  <div class="in">
+    <div><span class="zh">CLingS 為 CHIST-ERA「Science in Your Own Language」主題計畫；臺灣子計畫由國家科學及技術委員會補助。</span><span class="en">CLingS is funded under the CHIST-ERA call “Science in Your Own Language”; the Taiwan subproject is funded by the National Science and Technology Council.</span></div>
+    <div>© 2026 CLingS · <span class="zh">國家教育研究院</span><span class="en">NAER</span> · <span class="zh">最後更新 2026/11/18</span><span class="en">Last updated 18 Nov 2026</span></div>
+  </div>
+</footer>
+
+<script>
+  /* 頁面切換：三個頁面；頁面內的區塊（#taiwan、#contact、#news）會切到所屬頁面再捲動過去 */
+  const pages = [...document.querySelectorAll('section.page')];
+  const navLinks = [...document.querySelectorAll('nav a')];
+  const alias = { about: 'home', events: 'workshop', outputs: 'home' }; // 舊網址相容
+  function route(){
+    let id = (location.hash || '#home').slice(1);
+    id = alias[id] || id;
+    const el = document.getElementById(id);
+    const page = el ? (el.classList.contains('page') ? el : el.closest('section.page')) : null;
+    const show = page ? page.id : 'home';
+    pages.forEach(p => p.classList.toggle('show', p.id === show));
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + show));
+    document.querySelector('nav').classList.remove('open');
+    if (el && !el.classList.contains('page')) el.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+
+  /* 首頁「最新消息」：自動顯示工作坊頁最新消息的前兩則 */
+  function syncHomeNews(){
+    const home = document.getElementById('homeNews');
+    [...document.querySelectorAll('#newsList > li')].slice(0, 2)
+      .forEach(li => home.appendChild(li.cloneNode(true)));
+  }
+
+  /* 中英切換；網址加 ?lang=en 可直接開英文版（寄給國外夥伴時使用） */
+  function setLang(l){
+    document.body.dataset.lang = l;
+    document.documentElement.lang = l === 'zh' ? 'zh-Hant' : 'en';
+  }
+  function toggleLang(){ setLang(document.body.dataset.lang === 'zh' ? 'en' : 'zh'); }
+
+  syncHomeNews();
+  if (new URLSearchParams(location.search).get('lang') === 'en') setLang('en');
+  route();
+</script>
+</body>
+</html>
