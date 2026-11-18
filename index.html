@@ -16,7 +16,7 @@
 
   【網站架構】單一檔案，用網址 # 切換三個頁面：
     #home     計畫介紹（計畫簡介＋臺灣子計畫）
-    #team     研究團隊與聯絡
+    #team     研究團隊
     #workshop 2027 CLingS 工作坊（含最新消息）
 
   【給 AI／修改者的規則】
@@ -101,7 +101,10 @@
   .w{border-radius:14px;padding:.85rem 1rem;color:#fff;display:flex;flex-direction:column;justify-content:space-between;min-height:96px}
   .w small{font-family:var(--words);font-size:.85rem;opacity:.9}
   .w big{font-family:var(--words);font-size:clamp(1.3rem,2.1vw,2.1rem);line-height:1.15;overflow-wrap:anywhere}
+  .w .nm{display:block;font-family:var(--sans);font-weight:700;font-size:.82rem;line-height:1.3}
+  .w .nm + small{display:block;font-size:.78rem;opacity:.8;line-height:1.3}
   .w.rtl big,.w.rtl small{direction:rtl;text-align:right}
+  .w.rtl .nm{text-align:right}
   .w.tw{grid-column:span 2;background:var(--ink);min-height:120px}
   .w.tw .pair{display:flex;align-items:baseline;gap:1rem}
   .w.tw .pair b{font-family:"Noto Serif TC","Noto Sans TC",serif;font-weight:700;line-height:1}
@@ -221,7 +224,7 @@
     <button class="menu-btn" aria-label="選單 Menu" onclick="document.querySelector('nav').classList.toggle('open')">☰</button>
     <nav>
       <a href="#home"><span class="zh">計畫介紹</span><span class="en">About</span></a>
-      <a href="#team"><span class="zh">研究團隊與聯絡</span><span class="en">People &amp; Contact</span></a>
+      <a href="#team"><span class="zh">研究團隊</span><span class="en">Research Team</span></a>
       <a href="#workshop"><span class="zh">2027 CLingS 工作坊</span><span class="en">2027 CLingS Workshop</span></a>
     </nav>
     <button class="lang" onclick="toggleLang()">中 / EN</button>
@@ -258,13 +261,13 @@
       </div>
     </div>
     <div class="words" aria-label="七種語言的「科學」">
-      <div class="w tw"><small><span class="zh">台語</span><span class="en">Taiwanese</span> · Tâi-gí</small><div class="pair"><b>科學</b><big>kho-ha̍k</big></div></div>
-      <div class="w c1"><small>Українська</small><big>наука</big></div>
-      <div class="w c2"><small>Беларуская</small><big>навука</big></div>
-      <div class="w c3"><small>Eesti</small><big>teadus</big></div>
-      <div class="w c4"><small>Slovenčina</small><big>veda</big></div>
-      <div class="w c5"><small>ਪੰਜਾਬੀ</small><big>ਵਿਗਿਆਨ</big></div>
-      <div class="w c6 rtl"><small>ייִדיש</small><big>וויסנשאַפֿט</big></div>
+      <div class="w tw"><div><span class="nm">台語 Taiwanese</span><small>Tâi-gí</small></div><div class="pair"><b>科學</b><big>kho-ha̍k</big></div></div>
+      <div class="w c1"><div><span class="nm">烏克蘭語 Ukrainian</span><small>Українська</small></div><big>наука</big></div>
+      <div class="w c2"><div><span class="nm">白俄羅斯語 Belarusian</span><small>Беларуская</small></div><big>навука</big></div>
+      <div class="w c3"><div><span class="nm">愛沙尼亞語 Estonian</span><small>Eesti</small></div><big>teadus</big></div>
+      <div class="w c4"><div><span class="nm">斯洛伐克語 Slovak</span><small>Slovenčina</small></div><big>veda</big></div>
+      <div class="w c5"><div><span class="nm">旁遮普語 Punjabi</span><small>ਪੰਜਾਬੀ</small></div><big>ਵਿਗਿਆਨ</big></div>
+      <div class="w c6 rtl"><div><span class="nm">意第緒語 Yiddish</span><small>ייִדיש</small></div><big>וויסנשאַפֿט</big></div>
     </div>
   </div>
 
@@ -350,13 +353,13 @@
 </section>
 
 <!-- =========================================================
-     ✏️ 頁面二：研究團隊與聯絡 #team
+     ✏️ 頁面二：研究團隊 #team
      照片：把 <div class="avatar">照片</div> 換成 <img class="avatar" src="photos/檔名.jpg" alt="姓名">
      ========================================================= -->
 <section class="page" id="team">
   <div class="page-head">
-    <div class="eyebrow">People &amp; Contact</div>
-    <h1><span class="zh">研究團隊與聯絡</span><span class="en">People &amp; Contact</span></h1>
+    <div class="eyebrow">People</div>
+    <h1><span class="zh">研究團隊</span><span class="en">Research Team</span></h1>
   </div>
 
   <h2><span class="zh">臺灣團隊</span><span class="en">Taiwan Team</span></h2>
@@ -396,6 +399,7 @@
       <b><span class="zh">李宇仁</span><span class="en">Yuren Li</span></b>
       <small class="zh">國立陽明交通大學 外國語文學系 外國文學與語言學碩士班</small>
       <small class="en">MA Program in Foreign Literatures and Linguistics, Department of Foreign Languages and Literatures, National Yang Ming Chiao Tung University</small>
+      <a class="mail" href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a>
     </div></div>
     <div class="card person"><div class="avatar">照片</div><div>
       <span class="role"><span class="zh">兼任助理</span><span class="en">Part-time Research Assistant</span></span>
@@ -404,13 +408,6 @@
       <small class="en">Master’s Program, Department of Taiwan Culture, Languages and Literature, National Taipei University of Education</small>
       <a class="mail" href="mailto:hsuwei83@gmail.com">hsuwei83@gmail.com</a>
     </div></div>
-  </div>
-
-  <!-- ✏️ 聯絡我們 -->
-  <h2 id="contact"><span class="zh">聯絡我們</span><span class="en">Contact</span></h2>
-  <div class="card">
-    <p class="zh" style="margin:0">對計畫或工作坊有任何問題，歡迎來信計畫主持人 林佳怡：<a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
-    <p class="en" style="margin:0">For questions about the project or the workshop, please contact the Principal Investigator, Ka-I Lim: <a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a>.</p>
   </div>
 
   <h2><span class="zh">跨國合作團隊</span><span class="en">International Partners</span></h2>
@@ -483,8 +480,8 @@
   </ul>
 
   <h2><span class="zh">聯絡</span><span class="en">Contact</span></h2>
-  <p class="zh">工作坊相關問題，請來信計畫主持人 林佳怡：<a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
-  <p class="en">For questions about the workshop, please contact Ka-I Lim: <a href="mailto:liz462@mail.naer.edu.tw">liz462@mail.naer.edu.tw</a></p>
+  <p class="zh">工作坊相關問題，請來信 李宇仁：<a href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a></p>
+  <p class="en">For questions about the workshop, please contact Yuren Li: <a href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a></p>
 </section>
 
 </main>
@@ -501,7 +498,7 @@
   /* 頁面切換：三個頁面；頁面內的區塊（#taiwan、#contact、#news）會切到所屬頁面再捲動過去 */
   const pages = [...document.querySelectorAll('section.page')];
   const navLinks = [...document.querySelectorAll('nav a')];
-  const alias = { about: 'home', events: 'workshop', outputs: 'home' }; // 舊網址相容
+  const alias = { about: 'home', events: 'workshop', outputs: 'home', contact: 'team' }; // 舊網址相容
   function route(){
     let id = (location.hash || '#home').slice(1);
     id = alias[id] || id;
