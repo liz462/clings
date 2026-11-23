@@ -205,6 +205,24 @@
     footer .in{flex-direction:column}
   }
   @media print{header,footer{display:none}section.page{display:block!important}}
+  /* ===== 專題講者 ===== */
+  .keynote{display:grid;grid-template-columns:180px 1fr;gap:1.6rem;align-items:start;padding:1.6rem}
+  .keynote-photo img,.keynote-ph{width:180px;height:180px;border-radius:50%;object-fit:cover;background:var(--paper-2);border:4px solid var(--sun)}
+  .keynote-ph{place-items:center;color:var(--muted);font-size:.9rem}
+  .keynote-name{font-size:1.5rem;margin:.1rem 0 .2rem}
+  .keynote-name a{color:var(--ink);text-decoration:none;border-bottom:3px solid var(--sun)}
+  .keynote-name a:hover{background:var(--sun)}
+  .keynote-aff{color:var(--muted);margin:0 0 1rem}
+  .keynote-talk{display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1.2rem;margin:0;padding-top:1rem;border-top:1px dashed var(--line)}
+  .keynote-talk dt{font-weight:700;color:var(--muted);font-size:.92rem}
+  .keynote-talk dd{margin:0}
+  .keynote-talk .tba{color:var(--muted);font-style:italic}
+  @media (max-width:700px){
+    .keynote{grid-template-columns:1fr;justify-items:center;text-align:center;padding:1.3rem}
+    .keynote-photo img,.keynote-ph{width:140px;height:140px}
+    .keynote-talk{grid-template-columns:1fr;text-align:left;width:100%;gap:.1rem}
+    .keynote-talk dt{margin-top:.5rem}
+  }
 </style>
 </head>
 <body data-lang="zh">
@@ -390,20 +408,20 @@
   <div class="grid g3">
     <div class="card person"><div>
       <span class="role"><span class="zh">專任助理</span><span class="en">Full-time Research Assistant</span></span>
-      <b><span class="zh">陳映彤</span><span class="en">Yingtong Chen</span></b>
+      <b><span class="zh">陳映彤</span><span class="en">Iong-tong Tan</span></b>
       <small class="zh">國家教育研究院 語文教育及編譯研究中心</small>
       <small class="en">Research Center for Translation, Compilation and Language Education, NAER</small>
     </div></div>
     <div class="card person"><div>
       <span class="role"><span class="zh">兼任助理</span><span class="en">Part-time Research Assistant</span></span>
-      <b><span class="zh">李宇仁</span><span class="en">Yuren Li</span></b>
+      <b><span class="zh">李宇仁</span><span class="en">Yu-Ren Li</span></b>
       <small class="zh">國立陽明交通大學 外國語文學系 外國文學與語言學碩士班</small>
       <small class="en">MA Program in Foreign Literatures and Linguistics, Department of Foreign Languages and Literatures, National Yang Ming Chiao Tung University</small>
       <a class="mail" href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a>
     </div></div>
     <div class="card person"><div>
       <span class="role"><span class="zh">兼任助理</span><span class="en">Part-time Research Assistant</span></span>
-      <b><span class="zh">許宸瑋</span><span class="en">Chenwei Xu</span></b>
+      <b><span class="zh">許宸瑋</span><span class="en">Sîn-uí Khóo</span></b>
       <small class="zh">國立臺北教育大學 台灣語言與文化學系 碩士班</small>
       <small class="en">Master’s Program, Department of Taiwan Culture, Languages and Literature, National Taipei University of Education</small>
       <a class="mail" href="mailto:hsuwei83@gmail.com">hsuwei83@gmail.com</a>
@@ -470,6 +488,26 @@
   </div>
   <p class="note"><span class="zh">詳細議程、講者與報名方式將於 2027 年 2 月下旬在本頁公布。</span><span class="en">The full programme, speakers and registration details will be announced on this page in late February 2027.</span></p>
 
+  <!-- ✏️ 專題講者：照片請上傳到 photos/hsieh-shu-kai.jpg（建議正方形、寬 600px 以上）；講題與摘要公布後，把「待公告」換成正式內容 -->
+  <h2 id="keynote"><span class="zh">專題講者</span><span class="en">Keynote Speaker</span></h2>
+  <div class="card keynote">
+    <div class="keynote-photo">
+      <img src="photos/hsieh-shu-kai.jpg" alt="謝舒凱 Shu-Kai Hsieh" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+      <div class="keynote-ph" style="display:none"><span class="zh">照片</span><span class="en">Photo</span></div>
+    </div>
+    <div class="keynote-body">
+      <span class="tag"><span class="zh">4/8（四）下午 · 專題演講</span><span class="en">Thu 8 April · Afternoon keynote</span></span>
+      <h3 class="keynote-name"><a href="https://loperntu.github.io/index.html" target="_blank" rel="noopener"><span class="zh">謝舒凱 教授</span><span class="en">Prof. Shu-Kai Hsieh</span> ↗</a></h3>
+      <p class="keynote-aff"><span class="zh">國立臺灣大學 語言學研究所／腦與心智科學研究所</span><span class="en">Graduate Institute of Linguistics / Graduate Institute of Brain and Mind Sciences, National Taiwan University</span></p>
+      <dl class="keynote-talk">
+        <dt><span class="zh">講題</span><span class="en">Title</span></dt>
+        <dd class="tba"><span class="zh">待公告</span><span class="en">To be announced</span> (TBA)</dd>
+        <dt><span class="zh">摘要</span><span class="en">Abstract</span></dt>
+        <dd class="tba"><span class="zh">待公告</span><span class="en">To be announced</span> (TBA)</dd>
+      </dl>
+    </div>
+  </div>
+
   <!-- ✏️ 最新消息：新消息加在最上面；首頁會自動顯示前兩則 -->
   <h2 id="news"><span class="zh">最新消息</span><span class="en">News</span></h2>
   <ul class="news-list" id="newsList">
@@ -481,7 +519,7 @@
 
   <h2><span class="zh">聯絡</span><span class="en">Contact</span></h2>
   <p class="zh">工作坊相關問題，請來信 李宇仁：<a href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a></p>
-  <p class="en">For questions about the workshop, please contact Yuren Li: <a href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a></p>
+  <p class="en">For questions about the workshop, please contact Yu-Ren Li: <a href="mailto:liyr@mail.naer.edu.tw">liyr@mail.naer.edu.tw</a></p>
 </section>
 
 </main>
@@ -490,7 +528,7 @@
 <footer>
   <div class="in">
     <div><span class="zh">CLingS 為 CHIST-ERA「Science in Your Own Language」主題計畫；臺灣子計畫由國家科學及技術委員會補助。</span><span class="en">CLingS is funded under the CHIST-ERA call “Science in Your Own Language”; the Taiwan subproject is funded by the National Science and Technology Council.</span></div>
-    <div>© 2026 CLingS · <span class="zh">國家教育研究院</span><span class="en">NAER</span> · <span class="zh">最後更新 2026/11/18</span><span class="en">Last updated 18 Nov 2026</span></div>
+    <div>© 2026 CLingS · <span class="zh">國家教育研究院</span><span class="en">NAER</span> · <span class="zh">最後更新 2026/11/23</span><span class="en">Last updated 23 Nov 2026</span></div>
   </div>
 </footer>
 
